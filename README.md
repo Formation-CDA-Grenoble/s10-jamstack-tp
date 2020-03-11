@@ -1,68 +1,40 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Travaux pratiques JAMStack
 
-## Available Scripts
+Notre client est une chaîne de restaurants. Ils sont très contents du site vitrine qu'on leur a fait, mais ils voudraient maintenant afficher sur leur site une carte interactive avec des épingles pour identifier chaque restaurant. Il faudrait aussi que lorsqu'on clique sur une épingle, un panneau d'informations apparaisse, avec le nom, l'adresse, le numéro de téléphone, ainsi qu'une petite description de l'établissement (et pourquoi pas quelque photos tant qu'on y est).
 
-In the project directory, you can run:
+Comme le site actuel est un site statique hébergé sur Netlify, sans partie back-end, nous avons pensé qu'il serait judicieux d'implémenter cette fonctionnalité en JAMStack, avec le gestionnaire de contenu DatoCMS, et une application progressive en React.
 
-### `yarn start`
+## 1. Mise en place du projet DatoCMS
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Après vous être authentifié dans DatoCMS, faites un nouveau projet, dans lequel vous créerez un modèle **Restaurant**, avec les champs nécessaires à la réalisation de la fonctionnalité décrite ci-dessus. Ajoutez entre 5 et 10 instances de **Restaurant** en vous inspirant de restaurants réels ou fictifs.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## 2. Configuration de l'application React
 
-### `yarn test`
+Trouvez la clé d'API (en lecture seule) de votre projet et enregistrez-la dans un fichier **.env** au format suivant:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`REACT_APP_DATOCMS_API_TOKEN=<votre clé d'API>`
 
-### `yarn build`
+Après vous être authentifié dans Netlify, créez un nouveau site à partir du présent dépôt, et dans la configuration du projet, entrez une nouvelle variable d'environnement, avec le même nom, et la clé d'API comme valeur.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+La clé d'API doit s'afficher correctement en développement et en production.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## 3. Requête GraphQL permettant de récupérer tous les restaurants
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Dans DatoCMS, à l'aide de l'explorateur d'API, écrivez la requête GraphQL qui vous permet de récupérer tous les restaurants et leurs données. Testez cette requête à l'aide de Postman:
 
-### `yarn eject`
+- endpoint: `https://graphql.datocms.com/`
+- méthode: **POST**
+- body: `{ query: <Votre requête GraphQL> }`
+- headers: `{ Authorization: "Bearer <votre clé d'API>" }`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 4. Afficher la liste des restaurants dans l'application React
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Codez un composant qui récupère la liste de tous les restaurants à l'aide d'Axios (déjà inclus dans ce dépôt), et de la requête écrite à l'étape précédente.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 5. Afficher les restaurants sur une carte
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Le composant codé à l'étape précédente doit afficher une carte interactive sur laquelle apparaissent tous les restaurants, au lieu d'une simple liste. Vous pouvez pour ce faire utiliser [Leaflet](https://react-leaflet.js.org/en/) (déjà inclus dans ce dépôt), en vous inspirant de ce [CodePen](https://codepen.io/PaulLeCam/pen/gzVmGw) ou des [exemples fournis dans la documentation](https://react-leaflet.js.org/docs/en/examples).
 
-## Learn More
+## BONUS
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Ajoutez un routeur dans l'application, avec une page pour chaque restaurant, qui permet de présenter l'établissement. Chaque panneau ouvert au clic sur une épingle dans la carte doit contenir un lien qui amène à la page du restaurant correspondant.
