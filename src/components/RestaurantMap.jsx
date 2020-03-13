@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt, faPhone } from '@fortawesome/free-solid-svg-icons';
+
+import './map.css';
+
+const center = [45.188529, 5.724524];
 
 const query = `
 query MyQuery {
@@ -43,13 +50,26 @@ export default class RestaurantMap extends Component {
     }
 
     return (
-      <ul>
+      <Map center={center} zoom={14}>
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+        />
+
         {data.allRestaurants.map( (restaurant, index) =>
-          <li key={index}>
-            {restaurant.name}
-          </li>
+          <Marker position={[restaurant.location.latitude, restaurant.location.longitude]} key={index}>
+            <Popup>
+              <h2>{restaurant.name}</h2>
+              <div><FontAwesomeIcon icon={faMapMarkerAlt} /> {restaurant.address}</div>
+              <div><FontAwesomeIcon icon={faPhone} />{' '}
+                {restaurant.phone.split(/(\d{2})/)
+                .filter(item => item !== '')
+                .join(' ')}
+              </div>
+            </Popup>
+          </Marker>
         )}
-      </ul>
+      </Map>
     );
   }
 }
