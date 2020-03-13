@@ -1,7 +1,8 @@
 import React from 'react';
+import RestaurantMap from './components/RestaurantMap';
 
 const App = () =>
-  <div>Clé d'API de mon projet DatoCMS: {process.env.REACT_APP_DATOCMS_API_TOKEN}</div>
+  <RestaurantMap />
 ;
 
 export default App;
